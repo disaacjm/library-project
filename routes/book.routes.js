@@ -53,6 +53,11 @@ router.post("/books/create", (req, res, next) => {
 
 router.get("/books/:booksId", (req, res, next) => {
   Book.findById(req.params.booksId)
+  Author.find()
+  .then()
+  Book.findById(bookId)
+  .catch()
+
     .populate("author")
     .then((booksFromDB) => {
       const data = {
@@ -79,16 +84,19 @@ router.get("/books/:booksId", (req, res, next) => {
 //       });
 // });
 
-router.get("/books/:bookId/edit", (req, res, next) => {
+router.get('/books/:bookId/edit', async (req, res, next) => {
   const { bookId } = req.params;
 
-  Book.findById(bookId)
-    .populate("author")
-    .then((bookToEdit) => {
-      // console.log(bookToEdit);
-      res.render("books/book-edit.hbs", { book: bookToEdit });
-    })
-    .catch((error) => next(error));
+  try {
+      const authors = await Author.find();
+      const bookDetails = await Book.findById(bookId);
+
+      res.render('books/book-edit.hbs', { book: bookDetails, authors: authors });
+
+  } catch (e) {
+      next(e);
+  }
+
 });
 
 router.post("/books/:bookId/edit", (req, res, next) => {
