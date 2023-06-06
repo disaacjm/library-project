@@ -22,26 +22,33 @@ router.get("/books", (req, res, next) => {
 });
 
 router.get("/books/create", (req, res, next) => {
-  res.render("books/book-create");
+  Author.find()
+    .then((authorsFromDB) => {
+      res.render("books/book-create", { authorsArr: authorsFromDB });
+    })
+    .catch((e) => {
+      console.log("error displaying book create form", e);
+      next(e);
+    });
 });
 
+// CREATE: process form
 router.post("/books/create", (req, res, next) => {
   const newBook = {
     title: req.body.title,
-    author: req.body.author,
     description: req.body.description,
+    author: req.body.author,
     rating: req.body.rating,
   };
 
   Book.create(newBook)
     .then((newBook) => {
-      res.send("your book was created sir");
+      res.redirect("/books");
     })
     .catch((e) => {
       console.log("error creating new book", e);
       next(e);
     });
-  res.redirect("/books");
 });
 
 router.get("/books/:booksId", (req, res, next) => {
