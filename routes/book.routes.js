@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const Book = require("../models/Book.model");
+const Author = require("../models/Author.model");
 
 // GET /books
 router.get("/books", (req, res, next) => {
   Book.find()
+    .populate("author")
     .then((booksFromDB) => {
       const data = {
         books: booksFromDB,
@@ -31,19 +33,20 @@ router.post("/books/create", (req, res, next) => {
     rating: req.body.rating,
   };
 
-  Book.create(newBook) 
+  Book.create(newBook)
     .then((newBook) => {
-      res.send("your book was created sir")
+      res.send("your book was created sir");
     })
-    .catch( e => {
+    .catch((e) => {
       console.log("error creating new book", e);
       next(e);
-  });
-    res.redirect("/books");
-  });
+    });
+  res.redirect("/books");
+});
 
 router.get("/books/:booksId", (req, res, next) => {
   Book.findById(req.params.booksId)
+    .populate("author")
     .then((booksFromDB) => {
       const data = {
         books: booksFromDB,
@@ -55,7 +58,6 @@ router.get("/books/:booksId", (req, res, next) => {
       next(e);
     });
 });
-
 
 // router.get("/books/:bookId", (req, res, next) => {
 //   const id = req.params.bookId;
@@ -70,34 +72,37 @@ router.get("/books/:booksId", (req, res, next) => {
 //       });
 // });
 
-router.get('/books/:bookId/edit', (req, res, next) => {
+router.get("/books/:bookId/edit", (req, res, next) => {
   const { bookId } = req.params;
- 
+
   Book.findById(bookId)
-    .then(bookToEdit => {
+    .populate("author")
+    .then((bookToEdit) => {
       // console.log(bookToEdit);
-      res.render('books/book-edit.hbs', { book: bookToEdit });
+      res.render("books/book-edit.hbs", { book: bookToEdit });
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
-router.post('/books/:bookId/edit', (req, res, next) => {
+router.post("/books/:bookId/edit", (req, res, next) => {
   const { bookId } = req.params;
   const { title, description, author, rating } = req.body;
- 
-  Book.findByIdAndUpdate(bookId, { title, description, author, rating }, { new: true })
-    .then(updatedBook => res.redirect(`/books/${updatedBook.id}`))
-    .catch(error => next(error));
+
+  Book.findByIdAndUpdate(
+    bookId,
+    { title, description, author, rating },
+    { new: true }
+  )
+    .then((updatedBook) => res.redirect(`/books/${updatedBook.id}`))
+    .catch((error) => next(error));
 });
 
-router.post('/books/:bookId/delete', (req, res, next) => {
+router.post("/books/:bookId/delete", (req, res, next) => {
   const { bookId } = req.params;
- 
+
   Book.findByIdAndDelete(bookId)
-    .then(() => res.redirect('/books'))
-    .catch(error => next(error));
+    .then(() => res.redirect("/books"))
+    .catch((error) => next(error));
 });
-
-
 
 module.exports = router;

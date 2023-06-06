@@ -5,16 +5,16 @@
     <h2>{{this.title}}</h2>
     <p>
       Author:
-      {{this.author}}
+      {{this.author.name}}
       <br />
       Rating:
       {{this.rating}}
       <br />
       <a href="/books/{{this._id}}">More details</a>
       <a class="edit-btn" href="/books/{{_id}}/edit">Edit</a>
-       <form action="/books/{{_id}}/delete" method="POST">
-      <button>Delete</button>
-    </form>
+      <form action="/books/{{_id}}/delete" method="POST">
+        <button>Delete</button>
+      </form>
     </p>
 
   </section>
