@@ -22,3 +22,11 @@ h1 {
 .edit-btn{
   color: brown;
 }
+
+
+.warning {
+  padding: 1rem;
+  font-weight: bold;
+  border: 1px solid rgb(255, 213, 135);
+  background-color: rgb(255, 213, 135);
+}
