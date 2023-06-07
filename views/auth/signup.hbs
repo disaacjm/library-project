@@ -2,18 +2,31 @@
 
 <form method="POST" action="/signup">
 
-    <label> Email
-        <input type="email" name="email" placeholder="rockstar@ironhack.com" required />
-    </label>
+  {{#if errorMessage}}
+    <p class="warning">
+      {{errorMessage}}
+    </p>
+  {{/if}}
 
-    <label> Password
-        <input type="password" name="password" placeholder="********" required />
-    </label>
+  <label>
+    Email
+    <input
+      type="email"
+      name="email"
+      placeholder="rockstar@ironhack.com"
+      required
+    />
+  </label>
 
-    <button type="submit">Create account</button>
+  <label>
+    Password
+    <input type="password" name="password" placeholder="********" required />
+  </label>
 
-    <div class="info">
-        <p>Already have an account? Click <a href="/login">here</a> to login.</p>
-    </div>
+  <button type="submit">Create account</button>
+
+  <div class="info">
+    <p>Already have an account? Click <a href="/login">here</a> to login.</p>
+  </div>
 
 </form>
