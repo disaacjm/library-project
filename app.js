@@ -15,6 +15,13 @@ const hbs = require("hbs");
 
 const app = express();
 
+app.use(express.static("public")); // Make everything inside of public/ available
+
+app.set("views", __dirname + "/views"); //tells our Express app where to look for our views
+app.set("view engine", "hbs"); //sets HBS as the template engine
+
+hbs.registerPartials(__dirname + "/views/partials")
+
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
@@ -26,8 +33,10 @@ app.locals.appTitle = `${capitalize(projectName)} created with IronLauncher`;
 
 // 👇 Start handling routes here
 app.use("/", require("./routes/index.routes"));
+app.use("/", require("./routes/auth.routes"));
 app.use("/", require("./routes/book.routes"));
 app.use("/", require("./routes/author.routes"));
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
