@@ -71,12 +71,12 @@ router.post("/signup", (req, res, next) => {
     });
 });
 
-//GET /login
+//GET /login (display login form)
 router.get("/login", (req, res, next) => {
   res.render("auth/login");
 });
 
-//POST /login
+//POST /login (process login form)
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
@@ -101,9 +101,7 @@ router.post("/login", (req, res, next) => {
         return;
       } else if (bcryptjs.compareSync(password, user.passwordHash)) {
         //login successful
-
         req.session.currentUser = user; // store info in req.session (will be available in further requests)
-
         res.render("auth/user-profile", { userDetails: user });
       } else {
         //login failed
@@ -120,12 +118,11 @@ router.post("/login", (req, res, next) => {
 
 //POST /logout
 router.post("/logout", (req, res, next) => {
-  req.session.destroy(err => {
-      if (err) next(err);
-      res.redirect('/'); // if logout successful, redirect to homepage 
+  req.session.destroy((err) => {
+    if (err) next(err);
+    res.redirect("/"); // if logout sucessful, redirect to homepage
   });
-})
-
+});
 
 //GET user-profile
 router.get("/user-profile", (req, res) => {
